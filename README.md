@@ -2,9 +2,29 @@
 
 This is a basic design for the GUI.
 
-Consists 3 buttons -
-- Browse input directory
-- Browse output directory
-- Generate Results
+Consists of the following input fields -
+- Input directory
+- Yolo weights path
+- Ground truth images directory
+- Yolo version
+- Class id
+- Image size 
+- Output directory
 
-The YOLO version can be selected using the Dropdown menu
+The default values in the entry field are set accroding to the project requirements.
+
+Consists of the following buttons -
+- Browse (for input directory)
+- Browse (for yolo weights)
+- Browse (for ground truth images)
+- Generate output
+
+## Usage
+
+Install the tkinter module using
+
+`pip install tk`
+
+Head to the project directory and run the following command using CLI
+
+`python rgbi_gui.py`
