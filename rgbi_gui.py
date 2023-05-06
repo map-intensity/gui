@@ -1,5 +1,13 @@
+# Input and Output directory
+# Yolo weights path
+# Ground truth images directory
+# Yolo version
+# Class id
+# Size 
+
 import os
 
+import tkinter as tk
 from tkinter import *
 from tkinter import ttk
 from tkinter import filedialog
@@ -13,7 +21,7 @@ class RGBI_GUI:
     def __init__(self, window):
                
         window.title("RGB to Intensity Image")
-        window.geometry('670x160')
+        window.geometry('670x350')
         window.configure(background = '#f0f0f0')
         window.resizable(False, False)
         
@@ -27,15 +35,25 @@ class RGBI_GUI:
             yolo_ver.set(selected_yolo)
             print("Selected Yolo Version = ", selected_yolo)                                                        
                               
-        def browseFileFunc():
-            inputDir = filedialog.askopenfilename(initialdir=os.getcwd(), title = "Select The Input File")
-            print("Part Table  = ", inputDir)
+        def browseInpFunc():
+            inputDir = filedialog.askopenfilename(initialdir=os.getcwd(), title = "Select Input File")
+            print("Input Directory  = ", inputDir)
             ipPathName.set(inputDir)
- 
-        def browseDirFunc():
+
+        def browseOutFunc():
             OutputDir = filedialog.askdirectory(initialdir=os.getcwd(), initialfile=None)
             print("Output Directory = ", OutputDir)
             opPathName.set(OutputDir)
+
+        def browseYoloFunc():
+            YoloDir = filedialog.askopenfilename(initialdir=os.getcwd(), title = "Select Yolo Weights File")
+            print("Yolo weights Directory = ", YoloDir)
+            yoloPathName.set(YoloDir)
+
+        def browseGrtFunc():
+            GrtDir = filedialog.askopenfilename(initialdir=os.getcwd(), title = "Select Ground Truth File")
+            print("Ground truth Directory = ", GrtDir)
+            grtPathName.set(GrtDir)
 
         def generateReports():
             stripPath     = ipPathName.get()
@@ -62,26 +80,56 @@ class RGBI_GUI:
         ipPathName = StringVar(value=os.getcwd())
         self.entryInputPath = ttk.Entry(self.frame_header, width = 55, font = ('Arial',10), textvariable = ipPathName)
         self.entryInputPath.grid(column = 1, row = 0)
-        self.btnBrowseIpDir = ttk.Button(self.frame_header, text = "Browse", command = browseFileFunc)
+        self.btnBrowseIpDir = ttk.Button(self.frame_header, text = "Browse", command = browseInpFunc)
         self.btnBrowseIpDir.grid(column = 2, row = 0,  padx = 10, ipadx = 2, ipady = 2)
         
-        self.labelOutputPath = ttk.Label(self.frame_header, text = "Output Directory:")
-        self.labelOutputPath.grid(column = 0, row = 1, sticky = 'sw', pady = 10)
-        opPathName = StringVar(value=os.getcwd())
-        self.entryOutputPath = ttk.Entry(self.frame_header, width = 55, font = ('Arial',10), textvariable = opPathName)
-        self.entryOutputPath.grid(column = 1, row = 1)
-        self.btnBrowseOpDir = ttk.Button(self.frame_header, text = "Browse", command = browseDirFunc)
-        self.btnBrowseOpDir.grid(column = 2, row = 1,  padx = 10, ipadx = 2, ipady = 2)
+        self.labelYoloPath = ttk.Label(self.frame_header, text = "Yolo Weights Path:")
+        self.labelYoloPath.grid(column = 0, row = 1, sticky = 'sw', pady = 10)
+        yoloPathName = StringVar(value=os.getcwd())
+        self.entryyoloPath = ttk.Entry(self.frame_header, width = 55, font = ('Arial',10), textvariable = yoloPathName)
+        self.entryyoloPath.grid(column = 1, row = 1)
+        self.btnBrowseYoloDir = ttk.Button(self.frame_header, text = "Browse", command = browseYoloFunc)
+        self.btnBrowseYoloDir.grid(column = 2, row = 1,  padx = 10, ipadx = 2, ipady = 2)
+
+        self.labelGrtPath = ttk.Label(self.frame_header, text = "Ground Truth Directory:")
+        self.labelGrtPath.grid(column = 0, row = 2, sticky = 'sw', pady = 10)
+        grtPathName = StringVar(value=os.getcwd())
+        self.entrygrtPath = ttk.Entry(self.frame_header, width = 55, font = ('Arial',10), textvariable = grtPathName)
+        self.entrygrtPath.grid(column = 1, row = 2)
+        self.btnBrowseYoloDir = ttk.Button(self.frame_header, text = "Browse", command = browseGrtFunc)
+        self.btnBrowseYoloDir.grid(column = 2, row = 2,  padx = 10, ipadx = 2, ipady = 2)
         
         self.labelVersion = ttk.Label(self.frame_header, text = "YOLO Version:")
-        self.labelVersion.grid(column = 0, row = 2, sticky = 'sw', pady = 10) 
+        self.labelVersion.grid(column = 0, row = 3, sticky = 'sw', pady = 10) 
         yolo_ver = StringVar()
-        self.comboYolo = ttk.Combobox(self.frame_header, values=["v1", "v2", "v3", "v4", "v5"], width = 5, textvariable = yolo_ver)
-        self.comboYolo.grid(column = 1, row = 2, sticky = 'sw', pady = 10)
+        self.comboYolo = ttk.Combobox(self.frame_header, width = 15, values=["v1", "v2", "v3", "v4", "v5"], textvariable = yolo_ver)
+        self.comboYolo.grid(column = 1, row = 3, sticky = 'sw', pady = 10)
         self.comboYolo.current(0)
 
-        self.btnGenRes = ttk.Button(self.frame_header, text = "Generate Output", command = generateReports)
-        self.btnGenRes.grid(column = 2, row = 2, ipadx = 5, ipady = 3)
+        self.labelClass = ttk.Label(self.frame_header, text = "Class Id:")
+        self.labelClass.grid(column = 0, row = 4, sticky = 'sw', pady = 10)
+        class_id = StringVar()
+        class_id.set("0")
+        self.entrycid = tk.Entry(self.frame_header, width = 15, font = ('Arial',10), textvariable = class_id)
+        self.entrycid.grid(column = 1, row = 4, sticky = 'sw', pady = 10)
+
+        self.labelSize = ttk.Label(self.frame_header, text = "Image Size:")
+        self.labelSize.grid(column = 0, row = 5, sticky = 'sw', pady = 10)
+        size = StringVar()
+        size.set("640") 
+        self.entrysize = tk.Entry(self.frame_header, width = 15, font = ('Arial',10), textvariable = size)
+        self.entrysize.grid(column = 1, row = 5, sticky = 'sw', pady = 10)
+
+        self.labelOutputPath = ttk.Label(self.frame_header, text = "Output Directory:")
+        self.labelOutputPath.grid(column = 0, row = 6, sticky = 'sw', pady = 10)
+        opPathName = StringVar(value=os.getcwd())
+        self.entryOutputPath = ttk.Entry(self.frame_header, width = 55, font = ('Arial',10), textvariable = opPathName)
+        self.entryOutputPath.grid(column = 1, row = 6)
+        self.btnBrowseOpDir = ttk.Button(self.frame_header, text = "Browse", command = browseOutFunc)
+        self.btnBrowseOpDir.grid(column = 2, row = 6,  padx = 10, ipadx = 2, ipady = 2)
+
+        self.btnGenRes = ttk.Button(self.frame_header, text = "Generate Output", command = generateReports, width=30)
+        self.btnGenRes.grid(column = 1, row = 7, ipadx = 3, ipady = 3)
                     
         self.comboYolo.bind("<<ComboboxSelected>>", yolo_callbackFunc)
 
