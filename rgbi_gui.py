@@ -13,13 +13,14 @@ from tkinter import ttk
 from tkinter import filedialog
 from tkinter import messagebox
 
+import yaml
 
 # GUI for RGBI           
 
 class RGBI_GUI:
     
     def __init__(self, window):
-               
+        
         window.title("RGB to Intensity Image")
         window.geometry('670x350')
         window.configure(background = '#f0f0f0')
@@ -55,14 +56,36 @@ class RGBI_GUI:
             print("Ground truth Directory = ", GrtDir)
             grtPathName.set(GrtDir)
 
+        def ymlConvert():
+            data = {
+            'input_dir': ipPathName.get(),
+            'yolo_dir': yoloPathName.get(),
+            'ground_truth_dir': grtPathName.get(),
+            'yolo_ver': yolo_ver.get(),
+            'class_id': class_id.get(),
+            'image_size': size.get(),
+            'output_dir': opPathName.get()
+            }
+
+            # Path of the YAML file
+            file_path = 'data.yml'
+
+            # File opened in write mode
+            with open(file_path, 'w') as file:
+                yaml.dump(data, file)
+
         def generateReports():
             stripPath     = ipPathName.get()
-            stropPath = opPathName.get()
+            stryoloPath = yoloPathName.get()
+            strgroundtruthPath = grtPathName.get()
             stryoloVer     = yolo_ver.get()
-            
-            if len(stripPath) == 0 or len(stropPath) == 0:
+            intclassId = class_id.get()
+            intimageSize = size.get()
+            stropPath = opPathName.get()
+
+            if len(stripPath) == 0 or len(stryoloPath) == 0 or len(strgroundtruthPath) == 0 or len(stryoloVer) == 0 or len(str(intclassId)) == 0 or len(str(intimageSize)) == 0 or len(stropPath) == 0:
                  messagebox.showerror("Error", "Input Directory or Output Directory is not specified!")
-            else:
+            else: 
                 msgbox = messagebox.askyesno("Successful Completion", "The output is generated successfully!\n\nClick 'Yes' to open the output directory.\nClick 'No' to quit this application.")
                     
                 if msgbox == True:
@@ -70,6 +93,11 @@ class RGBI_GUI:
                     os.startfile(path)
                 else:
                     window.destroy()
+        
+        def generateOutput():
+            ymlConvert()
+            generateReports()
+
        
         self.frame_header = LabelFrame(window, text = 'Choose the options:', padx = 10, pady = 5, font = ('Arial', 10, 'bold'))
         self.frame_header.config(relief = GROOVE)
@@ -108,15 +136,15 @@ class RGBI_GUI:
 
         self.labelClass = ttk.Label(self.frame_header, text = "Class Id:")
         self.labelClass.grid(column = 0, row = 4, sticky = 'sw', pady = 10)
-        class_id = StringVar()
-        class_id.set("0")
+        class_id = IntVar()
+        class_id.set(0)
         self.entrycid = tk.Entry(self.frame_header, width = 15, font = ('Arial',10), textvariable = class_id)
         self.entrycid.grid(column = 1, row = 4, sticky = 'sw', pady = 10)
 
         self.labelSize = ttk.Label(self.frame_header, text = "Image Size:")
         self.labelSize.grid(column = 0, row = 5, sticky = 'sw', pady = 10)
-        size = StringVar()
-        size.set("640") 
+        size = IntVar()
+        size.set(640) 
         self.entrysize = tk.Entry(self.frame_header, width = 15, font = ('Arial',10), textvariable = size)
         self.entrysize.grid(column = 1, row = 5, sticky = 'sw', pady = 10)
 
@@ -128,15 +156,17 @@ class RGBI_GUI:
         self.btnBrowseOpDir = ttk.Button(self.frame_header, text = "Browse", command = browseOutFunc)
         self.btnBrowseOpDir.grid(column = 2, row = 6,  padx = 10, ipadx = 2, ipady = 2)
 
-        self.btnGenRes = ttk.Button(self.frame_header, text = "Generate Output", command = generateReports, width=30)
+        self.btnGenRes = ttk.Button(self.frame_header, text = "Generate Output", command = generateOutput, width=30)
         self.btnGenRes.grid(column = 1, row = 7, ipadx = 3, ipady = 3)
                     
         self.comboYolo.bind("<<ComboboxSelected>>", yolo_callbackFunc)
 
+        
+
 def main():            
-    
     window = Tk()
     RGBI_GUI(window)
     window.mainloop()
 
-if __name__ == "__main__": main() 
+if __name__ == "__main__": 
+    main() 
