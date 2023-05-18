@@ -1,0 +1,6 @@
+class_id: 0
+image_size: 640
+input_dir: C:/Users/Viththal/OneDrive/Desktop/pytestexample
+output_dir: C:/Users/Viththal/OneDrive/Desktop/pytestexample
+yolo_dir: C:/Users/Viththal/OneDrive/Desktop/pytestexample
+yolo_ver: ''
